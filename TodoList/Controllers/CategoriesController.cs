@@ -22,8 +22,12 @@ namespace TodoList.Controllers
             {
                 return BadRequest(ModelState);
             }
+            db.Categories.Add(category);
+            db.SaveChanges();
+
             return Ok();
         }
+       
         //réecriture de la methode dispose pour libérer en mémoire le DbContext et donc la connexion
         // override utilisé pour réecriture
         // methode dispose appelée lorsque que IIS n'utilise plus le controller
