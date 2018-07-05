@@ -12,9 +12,10 @@ namespace TodoList.Controllers
 {
     public class CategoriesController : ApiController
     {
+        //ouverture de la connexion a la db
         private TodoListDbContext db = new TodoListDbContext();
 
-        //ouverture de la connexion a la db
+       //creation d'une categorie
         [ResponseType(typeof(Category))]
         public IHttpActionResult PostCategory(Category category)
         {
@@ -28,19 +29,34 @@ namespace TodoList.Controllers
             return CreatedAtRoute("DefaultApi", new { id = category.ID }, category);
         }
 
+        //Afficher les categories
         [ResponseType(typeof(Category))]
         public List<Category> GetCategory()
         {
-            return (from x in db.Categories select x).ToList();
+            return db.Categories.ToList();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        //rechercher une categorie
         [ResponseType(typeof(Category))]
         public IHttpActionResult GetCategory(int id)
         {
-            var test = db.Categories.SingleOrDefault(x => x.ID == id);
-            return Ok(test);
+            var category = db.Categories.SingleOrDefault(x => x.ID == id);
+            // autre solution
+            // var category = db.Categories.Find(id)
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return Ok(category);
         }
 
+        //modifier une categorie
         [ResponseType(typeof(Category))]
         public IHttpActionResult PutCategory(int id, Category category)
         {
@@ -48,24 +64,39 @@ namespace TodoList.Controllers
             {
                 return BadRequest();
             }
-            var elementAMod = db.Categories.SingleOrDefault(x => x.ID == id);
-            elementAMod.Name = category.Name;
-            db.SaveChanges();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            // recherche la category deja existante pour la modifier
+            db.Entry(category).State = System.Data.Entity.EntityState.Modified;
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
             return StatusCode(HttpStatusCode.NoContent);
+            //autre methode
+            //var elementAMod = db.Categories.SingleOrDefault(x => x.ID == id);
+            //elementAMod.Name = category.Name;
+            //db.SaveChanges();
+            //return StatusCode(HttpStatusCode.NoContent);
         }
 
+        //effacer une categorie
         [ResponseType(typeof(Category))]
         public IHttpActionResult DeleteCategory(int id)
         {
-            var test = db.Categories.SingleOrDefault(x => x.ID == id);
-            if (test == null)
+            var category = db.Categories.SingleOrDefault(x => x.ID == id); // var category = db.Categories.Find(id);
+            if (category == null)
                 return BadRequest();
-            db.Categories.Remove(test);
+            db.Categories.Remove(category);
             db.SaveChanges();
 
 
-            return Ok(test);
+            return Ok(category);
         }
 
         //réecriture de la methode dispose pour libérer en mémoire le DbContext et donc la connexion

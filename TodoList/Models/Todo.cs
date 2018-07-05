@@ -6,14 +6,16 @@ using System.Web;
 
 namespace TodoList.Models
 {
+    [Table("Todos")]
     public class Todo
     {
         public int ID { get; set; }
+        //[Column("Name")]
         public string Name { get; set; }
         public bool Done { get; set; }
         public DateTime DeadLine{ get; set; }
         public int Priority { get; set; }
-        public int Description { get; set; }
+        public string Description { get; set; }
 
         public int CategoryID { get; set; }
 
