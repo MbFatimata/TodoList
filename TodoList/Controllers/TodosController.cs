@@ -21,6 +21,10 @@ namespace TodoList.Controllers
         /// <summary>
         /// Retourne la liste des Todos
         /// </summary>
+        /// <remarks>
+        /// Exemple remarque
+        /// </remarks>
+        /// <response code="200"> </response>
         /// <returns></returns>
         public IQueryable<Todo> GetTodos()
         {
