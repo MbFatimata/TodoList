@@ -48,23 +48,24 @@ namespace TodoList.Controllers
         [Route("api/todos/search")]
         public IQueryable <Todo> GetSearch (string name ="", int? categoryId = null, bool? done =null, DateTime? deadLine=null)
         {
+            var query = db.Todos.Where(x => !x.Deleted);
             if (!string.IsNullOrEmpty(name))
             {
-                return db.Todos.Where(x => !x.Deleted && x.Name.Contains(name));
+                query= query.Where(x => x.Name.Contains(name));
             }
-            if (categoryId.HasValue)
+            if (categoryId != null)
             {
-                return db.Todos.Where(x => !x.Deleted && x.CategoryID == categoryId);
+                query = query.Where(x => x.CategoryID == categoryId);
             }
-            if (done.HasValue)
+            if (done != null)
             {
-                return db.Todos.Where(x => !x.Deleted && x.Done == done);
+                query = query.Where(x => x.Done == done);
             }
-            if (deadLine.HasValue)
+            if (deadLine != null)
             {
-                return db.Todos.Where(x => !x.Deleted && x.DeadLine == deadLine);
+                query = query.Where(x => x.DeadLine == deadLine);
             }
-            return null;
+            return query;
 
         }
 
