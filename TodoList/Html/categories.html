@@ -29,10 +29,37 @@
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (ev) {
+                $.ajax({
+                    url: "http://localhost:53917/api/categories/" + $("#inputName").val(),
+                    method: 'GET',
+                    success: function (data) {
+                        let ul = $('#resultat');
+                        for (let item of data) {
+                            ul.append(`<li>${item.Name}</li>`);
+                        }
+                    },
+                    error: function (message) {
+                        alert(message);
+                    }
+                });
+                ev.preventDefault();
+            })
+        });
+    </script>
+    <script>
+        const button = document.querySelector('button');
+        button.addEventListener('submit', (ev) => {
+            document.location.href = ""
+        });
+    </script>
 
 </body>
 </html>
