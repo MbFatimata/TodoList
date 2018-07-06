@@ -33,8 +33,12 @@ namespace TodoList.Controllers
         [ResponseType(typeof(Category))]
         public List<Category> GetCategory()
         {
-            return db.Categories.ToList();
+            return db.Categories.Where(x => !x.Deleted).ToList(); //retourne la liste des categories non supprimée
         }
+        //public IQueryable<Category> GetCategory()
+        //{
+        //    return db.Categories.Where(x => !x.Deleted); //retourne la liste des categories non supprimée
+        //}
 
         /// <summary>
         /// 

@@ -6,9 +6,9 @@ using System.Web;
 
 namespace TodoList.Models
 {
-    public class Category
+    public class Category : BaseModel
     {
-        public int ID { get; set; }
+        //public int ID { get; set; } pas besoin car hérite de BaseModel
 
         [Required(ErrorMessage ="Le champ Name est obligatoire")] //champ obligatoire
         [MinLength(5, ErrorMessage = "Nombre de caracteres insuffisants")]

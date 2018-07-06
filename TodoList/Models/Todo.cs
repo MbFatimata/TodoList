@@ -7,9 +7,9 @@ using System.Web;
 namespace TodoList.Models
 {
     [Table("Todos")]
-    public class Todo
+    public class Todo : BaseModel
     {
-        public int ID { get; set; }
+       // public int ID { get; set; } pas besoin car herite de BaseModel
         //[Column("Name")]
         public string Name { get; set; }
         public bool Done { get; set; }
