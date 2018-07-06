@@ -10,8 +10,9 @@ using TodoList.Models;
 
 namespace TodoList.Controllers
 {
+    [RoutePrefix("api/categories")]
     public class CategoriesController : ApiController
-    {
+    {        
         //ouverture de la connexion a la db
         private TodoListDbContext db = new TodoListDbContext();
 
@@ -31,7 +32,6 @@ namespace TodoList.Controllers
 
         //Afficher les categories
         [ResponseType(typeof(Category))]
-        [Route("api/categories")]
         public List<Category> GetCategory()
         {
             return db.Categories.Where(x => !x.Deleted).ToList(); //retourne la liste des categories non supprimée
@@ -47,9 +47,9 @@ namespace TodoList.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
 
-        //rechercher une categorie
+        //rechercher une categorie part son ID
         [ResponseType(typeof(Category))]
-        [Route("api/categories/{id:int}")]
+        [Route("{id:int}")]
         public IHttpActionResult GetCategory(int id)
         {
             var category = db.Categories.SingleOrDefault(x => x.ID == id);
@@ -62,14 +62,17 @@ namespace TodoList.Controllers
             return Ok(category);
         }
 
+        //rechercher une categorie part son nom ou une partie de son nom
         [ResponseType(typeof(Category))]
-        [Route("api/categories/{name}")]
+        [Route("{name}")]
         public IQueryable<Category> GetCategory(string name)
         {
             return db.Categories.Where(x => !x.Deleted && x.Name.Contains(name));
         }
+
         //modifier une categorie
         [ResponseType(typeof(Category))]
+        [Route("{id:int}")]
         public IHttpActionResult PutCategory(int id, Category category)
         {
             if (id != category.ID)
@@ -99,6 +102,7 @@ namespace TodoList.Controllers
 
         //effacer une categorie
         [ResponseType(typeof(Category))]
+        [Route("api/categories/{id:int}")]
         public IHttpActionResult DeleteCategory(int id)
         {
             var category = db.Categories.SingleOrDefault(x => x.ID == id); // var category = db.Categories.Find(id);

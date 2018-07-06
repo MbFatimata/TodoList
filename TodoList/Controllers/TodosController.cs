@@ -44,6 +44,30 @@ namespace TodoList.Controllers
             return Ok(todo);
         }
 
+        // GET: api/Todos/search
+        [Route("api/todos/search")]
+        public IQueryable <Todo> GetSearch (string name ="", int? categoryId = null, bool? done =null, DateTime? deadLine=null)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                return db.Todos.Where(x => !x.Deleted && x.Name.Contains(name));
+            }
+            if (categoryId.HasValue)
+            {
+                return db.Todos.Where(x => !x.Deleted && x.CategoryID == categoryId);
+            }
+            if (done.HasValue)
+            {
+                return db.Todos.Where(x => !x.Deleted && x.Done == done);
+            }
+            if (deadLine.HasValue)
+            {
+                return db.Todos.Where(x => !x.Deleted && x.DeadLine == deadLine);
+            }
+            return null;
+
+        }
+
         // PUT: api/Todos/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutTodo(int id, Todo todo)

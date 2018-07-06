@@ -11,7 +11,7 @@ namespace TodoList.Models
         //[Key]
         public int ID { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
 
         public bool Deleted { get; set; } 
