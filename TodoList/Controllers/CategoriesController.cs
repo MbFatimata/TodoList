@@ -31,6 +31,7 @@ namespace TodoList.Controllers
 
         //Afficher les categories
         [ResponseType(typeof(Category))]
+        [Route("api/categories")]
         public List<Category> GetCategory()
         {
             return db.Categories.Where(x => !x.Deleted).ToList(); //retourne la liste des categories non supprimée
@@ -48,6 +49,7 @@ namespace TodoList.Controllers
 
         //rechercher une categorie
         [ResponseType(typeof(Category))]
+        [Route("api/categories/{id:int}")]
         public IHttpActionResult GetCategory(int id)
         {
             var category = db.Categories.SingleOrDefault(x => x.ID == id);
@@ -60,6 +62,12 @@ namespace TodoList.Controllers
             return Ok(category);
         }
 
+        [ResponseType(typeof(Category))]
+        [Route("api/categories/{name}")]
+        public IQueryable<Category> GetCategory(string name)
+        {
+            return db.Categories.Where(x => !x.Deleted && x.Name.Contains(name));
+        }
         //modifier une categorie
         [ResponseType(typeof(Category))]
         public IHttpActionResult PutCategory(int id, Category category)
@@ -95,8 +103,11 @@ namespace TodoList.Controllers
         {
             var category = db.Categories.SingleOrDefault(x => x.ID == id); // var category = db.Categories.Find(id);
             if (category == null)
-                return BadRequest();
-            db.Categories.Remove(category);
+                return NotFound();
+            //db.Categories.Remove(category);
+            category.Deleted = true;
+            category.DeletedAt = DateTime.Now;
+            db.Entry(category).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
 
