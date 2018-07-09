@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Les categories en HTML</title>
-    <link rel=" stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" /> 
+    <link rel=" stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
 </head>
 <body>
     <div class="container">
@@ -53,6 +53,28 @@
                 ev.preventDefault();
             })
         });
+    </script>
+
+    <h2> Ajouter des categories </h2>
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (ev) {
+                $.ajax({
+                    url: "http://localhost:53917/api/categories/" + $("#inputName").val(),
+                    method: 'POST',
+                    data: { Name: 'categorie' },
+                    success: function (data) {
+                        let ul = $('#resultat');
+                        for (let item of data) {
+                            ul.append(`<li>${item.Name}</li>`);
+                        }
+                    },
+                    error: function (data) { alert('Requete Ajax impossible'); }
+
+                });
+                ev.preventDefault();
+            })
+        })
     </script>
 
 </body>
